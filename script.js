@@ -1,17 +1,3 @@
-// Placeholder for future JavaScript functionality
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Placeholder for product detail, add to cart, and other interactive features
-    const viewDetailsButtons = document.querySelectorAll('.view-details');
-
-    viewDetailsButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            alert('This will take you to the product detail page.');
-            // Logic for opening the product detail page goes here
-        });
-    });
-});
-
 // Product Data
 const products = [
     {
@@ -28,56 +14,127 @@ const products = [
         description: "Sleek and stylish glasses for the modern individual.",
         price: "$129.99"
     },
+    {
+        id: 3,
+        name: "Modern Glasses",
+        image: "images/glasses3.jpeg",
+        description: "Sleek and stylish glasses for the modern individual.",
+        price: "$129.99"
+    },
+    {
+        id: 4,
+        name: "Modern Glasses",
+        image: "images/glasses3.jpeg",
+        description: "Sleek and stylish glasses for the modern individual.",
+        price: "$129.99"
+    },
+    {
+        id: 5,
+        name: "Modern Glasses",
+        image: "images/glasses3.jpeg",
+        description: "Sleek and stylish glasses for the modern individual.",
+        price: "$129.99"
+    },
+    {
+        id: 6,
+        name: "Modern Glasses",
+        image: "images/glasses3.jpeg",
+        description: "Sleek and stylish glasses for the modern individual.",
+        price: "$129.99"
+    },
+    {
+        id: 7,
+        name: "Modern Glasses",
+        image: "images/glasses3.jpeg",
+        description: "Sleek and stylish glasses for the modern individual.",
+        price: "$129.99"
+    },
     // Add more products as needed
 ];
+
+let cart = [];
 
 // Load Products on Page Load
 document.addEventListener('DOMContentLoaded', () => {
     const productGrid = document.getElementById('product-grid');
-    
     products.forEach(product => {
         const productCard = document.createElement('div');
-        productCard.className = 'product-card';
+        productCard.classList.add('product-card');
         productCard.innerHTML = `
             <img src="${product.image}" alt="${product.name}">
             <h3>${product.name}</h3>
             <p>${product.price}</p>
-            <button class="view-details" onclick="viewDetails(${product.id})">View Details</button>
+            <button onclick="viewProduct(${product.id})">View Details</button>
         `;
         productGrid.appendChild(productCard);
     });
 });
 
 // View Product Details
-function viewDetails(productId) {
+function viewProduct(productId) {
     const product = products.find(p => p.id === productId);
-
-    if (product) {
-        document.getElementById('detail-image').src = product.image;
-        document.getElementById('detail-name').innerText = product.name;
-        document.getElementById('detail-description').innerText = product.description;
-        document.getElementById('detail-price').innerText = product.price;
-
-        // Hide the product list and show the product detail section
-        document.getElementById('products-section').style.display = 'none';
-        document.getElementById('product-detail-section').style.display = 'block';
-    }
+    document.getElementById('detail-image').src = product.image;
+    document.getElementById('detail-name').innerText = product.name;
+    document.getElementById('detail-description').innerText = product.description;
+    document.getElementById('detail-price').innerText = product.price;
+    showProductDetailPage();
 }
 
-// Show Home Page
-function showHomePage() {
-    document.getElementById('products-section').style.display = 'block';
-    document.getElementById('product-detail-section').style.display = 'none';
+// Show Product Detail Page
+function showProductDetailPage() {
+    document.getElementById('home-section').style.display = 'none';
+    document.getElementById('products-section').style.display = 'none';
+    document.getElementById('product-detail-section').style.display = 'block';
 }
 
 // Add to Cart
 function addToCart() {
-    alert('Product added to cart!');
-    // Add logic to handle adding product to cart
+    const productName = document.getElementById('detail-name').innerText;
+    const productPrice = document.getElementById('detail-price').innerText;
+    const productImage = document.getElementById('detail-image').src;
+    cart.push({ name: productName, price: productPrice, image: productImage });
+    alert(`${productName} has been added to your cart.`);
 }
 
-// Buy Now
+// Buy Now (Similar to Add to Cart, but redirects to checkout)
 function buyNow() {
-    alert('Proceed to checkout!');
-    // Add logic to handle immediate purchase
+    addToCart();
+    showCartPage();
+}
+
+// Show Cart Page
+function showCartPage() {
+    document.getElementById('home-section').style.display = 'none';
+    document.getElementById('products-section').style.display = 'none';
+    document.getElementById('product-detail-section').style.display = 'none';
+    document.getElementById('cart-section').style.display = 'block';
+
+    const cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = '';
+    cart.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+        cartItem.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <h4>${item.name}</h4>
+            <p>${item.price}</p>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+    });
+}
+
+// Show Home Page
+function showHomePage() {
+    document.getElementById('home-section').style.display = 'block';
+    document.getElementById('products-section').style.display = 'block';
+    document.getElementById('product-detail-section').style.display = 'none';
+    document.getElementById('cart-section').style.display = 'none';
+}
+
+// Checkout Function
+function checkout(event) {
+    event.preventDefault();
+    alert("Thank you for your purchase!");
+    cart = [];  // Clear cart after checkout
+    showHomePage();
 }
